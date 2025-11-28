@@ -1,0 +1,9 @@
+# Fusion 360 design placeholder
+# Optical system for focusing light onto mechanical retina
+
+COMPONENT LensAssembly {
+  FocalLength: 10mm,
+  NA: 0.8,
+  WavelengthRange: [400nm, 700nm],
+  Mounting: C-mount
+}
