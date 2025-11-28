@@ -1,0 +1,9 @@
+# GDSII layout file placeholder
+# This would contain the actual MEMS layout data
+# For now, creating a placeholder structure
+
+BEGINSTRUCTURE CantileverArray
+LAYER 1: Silicon structural layer
+LAYER 2: Metal contacts  
+LAYER 3: Sacrificial layer
+ENDSTRUCTURE
