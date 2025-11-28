@@ -1,0 +1,8 @@
+category,part_number,description,quantity,notes
+sensor,custom_mems,"MEMS Cantilever Array",1,"Custom fabricated"
+ic,AD8421,"Low-Noise Instrumentation Amplifier",4,"For signal conditioning"
+ic,ADS131A04,"24-bit Sigma-Delta ADC",2,"High resolution conversion"
+ic,XC7A35T,"Artix-7 FPGA",1,"Real-time processing"
+connector,USB3_B,"USB 3.0 Type-B Connector",1,"Data interface"
+passive,0805_100R,"100Ω Resistor",20,"Signal termination"
+passive,0805_10uF,"10μF Capacitor",15,"Power decoupling"
