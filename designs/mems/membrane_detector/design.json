@@ -1,0 +1,22 @@
+{
+  "design_name": "Membrane Photon Detector",
+  "version": "1.0",
+  "parameters": {
+    "membrane_diameter": "50 μm",
+    "membrane_thickness": "500 nm", 
+    "material": "Silicon Nitride",
+    "support_structure": "Circular clamp",
+    "readout_method": "Optical interferometry"
+  },
+  "performance_goals": {
+    "minimum_detectable_power": "1 pW",
+    "response_time": "1 ms",
+    "operating_temperature": "300 K"
+  },
+  "fabrication_process": [
+    "Silicon substrate preparation",
+    "LPCVD SiN deposition",
+    "Backside etch window definition",
+    "KOH etching to release membrane"
+  ]
+}
