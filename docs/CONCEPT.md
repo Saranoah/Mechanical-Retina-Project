@@ -1,6 +1,4 @@
 
-## 2. docs/CONCEPT.md
-```markdown
 # Mechanical Retina: Core Concept
 
 ## Overview
