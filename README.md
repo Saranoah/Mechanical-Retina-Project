@@ -145,6 +145,24 @@ mechanical-retina/
 - **Readout:** Capacitive displacement sensing
 - **Fabrication:** Standard MEMS process (14 masks)
 
+  ---
+
+## 📸 Visualizations
+
+### System Overview
+
+![Mechanical Retina System](docs/images/system_overview_macro.png)
+*100×100 pixel mechanical sensor array with bimetallic cantilevers and capacitive readout*
+
+### Single Pixel Detail
+
+![Single Pixel Closeup](docs/images/single_pixel_closeup.png)
+*Nano-scale view of a single pixel showing photon impact and mechanical deflection*
+
+> **Note:** Images generated using AI tools. See [`docs/visualization/IMAGE_GENERATION_PROMPTS.md`](docs/visualization/IMAGE_GENERATION_PROMPTS.md) for prompts and generation instructions.
+
+---
+
 ### Key Performance Metrics:
 ```
 ✅ Sensitivity:        0.5 pW (meets <1 pW target)
