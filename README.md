@@ -257,11 +257,11 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 **Academic Use:** Please cite this repository if used in academic work:
 ```bibtex
 @misc{mechanical_retina_2024,
-  author = {[Your Name]},
+  author = {[Israa Ali]},
   title = {Mechanical Retina: Photon Detection Through Mechanical Transduction},
   year = {2024},
   publisher = {GitHub},
-  url = {https://github.com/yourusername/mechanical-retina}
+  url = {https://github.com/Mechanical-Retina-Project}
 }
 ```
 
@@ -270,17 +270,15 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - Inspired by biological photoreceptors and quantum optomechanics research
-- MEMS design principles from [institution/lab name]
 - Simulation framework adapted from open-source scientific Python tools
 
 ---
 
 ## 📧 Contact
 
-**Project Lead:** [Your Name]  
-**Email:** your.email@domain.com  
-**LinkedIn:** [Your Profile]  
-**Institution:** [Your University/Company]
+**Project Lead:** Israa Ali 
+**Email:** israaali2019@domain.com  
+**LinkedIn:**  https://www.linkedin.com/in/israaalipharmacist/ 
 
 **Questions?** Open an issue or start a discussion!
 
@@ -294,17 +292,3 @@ If you find this project interesting, please consider starring it! ⭐
 
 **Note:** This is a research project exploring fundamental limits of mechanical photodetection. It is not intended to compete with commercial CMOS/CCD sensors but rather to demonstrate novel transduction principles and potential applications in extreme environments.
 
----
-
-This enhanced README:
-✅ Provides clear context and motivation
-✅ Shows concrete technical specifications
-✅ Includes realistic performance expectations
-✅ Offers proper code examples
-✅ Has professional structure with badges
-✅ Sets appropriate expectations (research phase)
-✅ Includes visual elements (tables, diagrams)
-✅ Provides clear contribution guidelines
-✅ Acknowledges limitations honestly
-
-Would you like me to create additional supporting documents like CONTRIBUTING.md, a detailed theory document, or visualization scripts for the figures?
