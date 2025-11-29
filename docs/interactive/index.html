@@ -1,1 +1,457 @@
+import React, { useState } from 'react';
+import { Cpu, Zap, Thermometer, CircuitBoard, ChevronDown, ChevronRight, Info } from 'lucide-react';
 
+const PCBDesignViewer = () => {
+  const [expandedBoard, setExpandedBoard] = useState('readout');
+
+  const boards = {
+    readout: {
+      name: "Readout Electronics Board",
+      icon: <CircuitBoard className="w-6 h-6" />,
+      color: "bg-blue-500",
+      purpose: "Interface with 100×100 mechanical sensor array and digitize analog signals",
+      specs: {
+        dimensions: "100mm × 80mm",
+        layers: "6-layer FR4",
+        impedance: "50Ω controlled",
+        thickness: "1.6mm"
+      },
+      components: [
+        {
+          category: "Analog Frontend (AFE)",
+          parts: [
+            { name: "Charge Amplifiers", qty: 100, part: "AD8429", desc: "Low-noise JFET input op-amp, <5e⁻ RMS", price: "$3.50" },
+            { name: "Feedback Capacitors", qty: 100, part: "Custom 10fF", desc: "Precision MIM capacitors", price: "$2.00" },
+            { name: "Reset Switches", qty: 100, part: "ADG1419", desc: "Low charge injection CMOS", price: "$0.85" },
+            { name: "Column Multiplexer", qty: 7, part: "ADG1206 (16:1)", desc: "Cascade to 100:1", price: "$4.20" }
+          ]
+        },
+        {
+          category: "Analog-to-Digital Conversion",
+          parts: [
+            { name: "SAR ADC", qty: 1, part: "AD7476 (12-bit)", desc: "1 MSPS, 0.8mV LSB", price: "$4.25" },
+            { name: "Voltage Reference", qty: 1, part: "ADR435", desc: "3.3V ±0.05%, 3ppm/°C", price: "$8.50" },
+            { name: "ADC Driver", qty: 1, part: "ADA4857", desc: "Low distortion, 1MHz BW", price: "$3.75" }
+          ]
+        },
+        {
+          category: "Digital Control",
+          parts: [
+            { name: "Row Decoder", qty: 2, part: "74HC154 (4-to-16)", desc: "For 100 row addressing", price: "$0.65" },
+            { name: "Timing Generator", qty: 1, part: "SN74LVC1G123", desc: "CDS timing control", price: "$0.45" },
+            { name: "Level Shifters", qty: 4, part: "TXS0108E", desc: "3.3V ↔ 1.8V logic", price: "$0.95" }
+          ]
+        },
+        {
+          category: "Power Management",
+          parts: [
+            { name: "Analog LDO", qty: 4, part: "LT3045", desc: "±3.3V, ultralow noise", price: "$6.50" },
+            { name: "Digital Buck", qty: 1, part: "TPS62160", desc: "3.3V @ 1A switching", price: "$1.85" },
+            { name: "Decoupling Caps", qty: 150, part: "Various", desc: "X7R ceramic, 0402", price: "$0.05" }
+          ]
+        }
+      ],
+      designConsiderations: [
+        "Guard rings around analog traces to minimize crosstalk",
+        "Star grounding topology for analog/digital separation",
+        "Kelvin sensing for voltage reference",
+        "Thermal vias under power devices (100 vias/cm²)",
+        "Shielded USB connector with ESD protection"
+      ],
+      interfaces: [
+        { name: "Sensor Input", type: "100-pin high-density connector", spec: "0.5mm pitch, gold plated" },
+        { name: "Digital Output", type: "USB 3.0 Type-C", spec: "5 Gbps, SuperSpeed" },
+        { name: "Power Input", type: "Barrel jack", spec: "12V @ 2A" },
+        { name: "Expansion", type: "20-pin header", spec: "SPI, I²C, UART, GPIOs" }
+      ]
+    },
+    
+    power: {
+      name: "Power Supply & Distribution Board",
+      icon: <Zap className="w-6 h-6" />,
+      color: "bg-yellow-500",
+      purpose: "Provide ultra-clean, low-noise power to sensitive analog circuits and digital systems",
+      specs: {
+        dimensions: "80mm × 60mm",
+        layers: "4-layer FR4",
+        impedance: "N/A (power board)",
+        thickness: "2.0mm (heavy copper)"
+      },
+      components: [
+        {
+          category: "Input Stage",
+          parts: [
+            { name: "Input Protection", qty: 1, part: "TVS Diode Array", desc: "Over-voltage clamp", price: "$0.85" },
+            { name: "Input Capacitor", qty: 2, part: "100µF Tantalum", desc: "Low ESR bulk storage", price: "$1.20" },
+            { name: "Input Filter", qty: 1, part: "LC Pi-filter", desc: "50kHz cutoff", price: "$2.50" }
+          ]
+        },
+        {
+          category: "Analog Power Rails",
+          parts: [
+            { name: "+3.3V Analog LDO", qty: 2, part: "LT3045", desc: "500mA, 0.8µV RMS", price: "$6.50" },
+            { name: "-3.3V Analog LDO", qty: 1, part: "LT3094", desc: "Negative rail", price: "$6.50" },
+            { name: "+5V Pre-regulator", qty: 1, part: "LT3080", desc: "1A, adjustable", price: "$5.25" },
+            { name: "Output Caps", qty: 20, part: "10µF X7R", desc: "Low ESR ceramics", price: "$0.35" }
+          ]
+        },
+        {
+          category: "Digital Power Rails",
+          parts: [
+            { name: "+3.3V Buck", qty: 1, part: "TPS62160", desc: "1A switching, 95% eff", price: "$1.85" },
+            { name: "+1.8V LDO", qty: 1, part: "TPS7A4700", desc: "1A, low dropout", price: "$2.40" },
+            { name: "Inductor", qty: 1, part: "4.7µH shielded", desc: "2A saturation", price: "$0.95" }
+          ]
+        },
+        {
+          category: "Active Filtering",
+          parts: [
+            { name: "Active Filter Op-Amp", qty: 4, part: "OPA1612", desc: "Low-noise buffer", price: "$3.20" },
+            { name: "RC Filter Network", qty: 1, part: "Custom array", desc: "Multi-stage filtering", price: "$1.50" }
+          ]
+        },
+        {
+          category: "Monitoring & Protection",
+          parts: [
+            { name: "Power Monitor", qty: 1, part: "INA226", desc: "I²C voltage/current", price: "$2.15" },
+            { name: "Over-current IC", qty: 3, part: "TPS2663", desc: "Electronic fuse", price: "$1.35" },
+            { name: "LED Indicators", qty: 6, part: "Various colors", desc: "Power status", price: "$0.15" }
+          ]
+        }
+      ],
+      designConsiderations: [
+        "Separate analog and digital ground planes (star point connection)",
+        "Heavy copper traces (2oz) for power distribution",
+        "Multiple parallel vias for low impedance",
+        "Post-regulator RC filtering on all analog supplies",
+        "Thermal management: heatsinks on linear regulators"
+      ],
+      powerBudget: {
+        analogRails: { voltage: "±3.3V", current: "300mA", power: "2.0W" },
+        digitalRails: { voltage: "3.3V", current: "800mA", power: "2.6W" },
+        sensorBias: { voltage: "3.3V", current: "50mA", power: "0.17W" },
+        total: { power: "4.8W", efficiency: "85%", inputPower: "5.6W" }
+      }
+    },
+    
+    control: {
+      name: "System Control & Management Board",
+      icon: <Thermometer className="w-6 h-6" />,
+      color: "bg-red-500",
+      purpose: "Temperature control, system monitoring, and auxiliary functions",
+      specs: {
+        dimensions: "70mm × 50mm",
+        layers: "4-layer FR4",
+        impedance: "N/A",
+        thickness: "1.6mm"
+      },
+      components: [
+        {
+          category: "Temperature Control",
+          parts: [
+            { name: "Precision Thermistor", qty: 2, part: "NTCLE413E2103F102L", desc: "±10mK accuracy", price: "$2.50" },
+            { name: "Temperature ADC", qty: 1, part: "ADS1220 (24-bit)", desc: "0.1mK resolution", price: "$4.95" },
+            { name: "TEC Driver", qty: 1, part: "LTC3633", desc: "3A H-bridge controller", price: "$8.75" },
+            { name: "TEC Module", qty: 1, part: "CP0.8-127-045L", desc: "Peltier cooler", price: "$45.00" },
+            { name: "Heatsink", qty: 1, part: "Custom aluminum", desc: "Thermal interface", price: "$8.00" }
+          ]
+        },
+        {
+          category: "PID Controller",
+          parts: [
+            { name: "Microcontroller", qty: 1, part: "STM32F407", desc: "168MHz ARM Cortex-M4", price: "$8.50" },
+            { name: "Crystal", qty: 1, part: "8MHz", desc: "System clock", price: "$0.35" },
+            { name: "EEPROM", qty: 1, part: "24LC256", desc: "Calibration storage", price: "$0.65" }
+          ]
+        },
+        {
+          category: "Sensor Interface",
+          parts: [
+            { name: "Humidity Sensor", qty: 1, part: "SHT31-DIS", desc: "Monitor enclosure", price: "$3.20" },
+            { name: "Pressure Sensor", qty: 1, part: "BMP388", desc: "Vacuum monitoring", price: "$3.85" },
+            { name: "Accelerometer", qty: 1, part: "ADXL355", desc: "Vibration detection", price: "$4.50" }
+          ]
+        },
+        {
+          category: "Status & Interface",
+          parts: [
+            { name: "OLED Display", qty: 1, part: "SSD1306 0.96\"", desc: "128×64 pixels", price: "$4.50" },
+            { name: "Pushbuttons", qty: 3, part: "Tactile switches", desc: "User interface", price: "$0.25" },
+            { name: "Status LEDs", qty: 8, part: "RGB LEDs", desc: "System indicators", price: "$0.45" },
+            { name: "Buzzer", qty: 1, part: "Piezo", desc: "Alarm alerts", price: "$0.85" }
+          ]
+        },
+        {
+          category: "Communication",
+          parts: [
+            { name: "UART Transceiver", qty: 1, part: "MAX3232", desc: "RS-232 debug port", price: "$1.25" },
+            { name: "I²C Isolator", qty: 1, part: "ISO1540", desc: "Galvanic isolation", price: "$2.95" },
+            { name: "CAN Transceiver", qty: 1, part: "MCP2562", desc: "Optional bus", price: "$1.15" }
+          ]
+        }
+      ],
+      designConsiderations: [
+        "PID loop runs at 10 Hz for temperature stability",
+        "Watchdog timer for fault recovery",
+        "Non-volatile storage of calibration coefficients",
+        "Firmware update via USB bootloader",
+        "EMI shielding around TEC driver"
+      ],
+      controlAlgorithm: {
+        pidParameters: { kp: "100", ki: "10", kd: "1" },
+        updateRate: "10 Hz",
+        targetStability: "±10 mK",
+        temperatureRange: "10°C to 40°C ambient"
+      }
+    },
+    
+    fpga: {
+      name: "FPGA Processing Board",
+      icon: <Cpu className="w-6 h-6" />,
+      color: "bg-purple-500",
+      purpose: "Real-time signal processing, frame buffering, and USB communication",
+      specs: {
+        dimensions: "120mm × 90mm",
+        layers: "8-layer FR4",
+        impedance: "50Ω/100Ω differential",
+        thickness: "1.6mm"
+      },
+      components: [
+        {
+          category: "FPGA Core",
+          parts: [
+            { name: "FPGA", qty: 1, part: "Xilinx XC7S25-1FTGB196C", desc: "Spartan-7, 23K logic cells", price: "$35.00" },
+            { name: "Configuration Flash", qty: 1, part: "N25Q128A13ESF40", desc: "128Mbit SPI", price: "$3.25" },
+            { name: "JTAG Header", qty: 1, part: "2×7 pin 0.1\"", desc: "Programming interface", price: "$0.45" }
+          ]
+        },
+        {
+          category: "Memory Subsystem",
+          parts: [
+            { name: "DDR3 SDRAM", qty: 1, part: "MT41K256M16HA-125", desc: "4Gbit, 1600 MT/s", price: "$12.50" },
+            { name: "DDR3 Termination", qty: 1, part: "Custom network", desc: "ODT resistors", price: "$1.00" }
+          ]
+        },
+        {
+          category: "High-Speed Interface",
+          parts: [
+            { name: "USB 3.0 Bridge", qty: 1, part: "FT600Q", desc: "FIFO to USB 3.0", price: "$12.00" },
+            { name: "USB Connector", qty: 1, part: "Type-C receptacle", desc: "SuperSpeed certified", price: "$1.50" },
+            { name: "ESD Protection", qty: 1, part: "TPD8S300", desc: "USB 3.0 TVS", price: "$1.85" }
+          ]
+        },
+        {
+          category: "Clock Generation",
+          parts: [
+            { name: "Primary Oscillator", qty: 1, part: "100MHz TCXO", desc: "±1ppm stability", price: "$4.50" },
+            { name: "Clock Buffer", qty: 1, part: "SI53301", desc: "Low-jitter fanout", price: "$3.75" },
+            { name: "PLL Filters", qty: 1, part: "LC network", desc: "Jitter reduction", price: "$0.85" }
+          ]
+        },
+        {
+          category: "Power Management",
+          parts: [
+            { name: "FPGA Core (1.0V)", qty: 1, part: "TPS54302", desc: "3A buck converter", price: "$2.40" },
+            { name: "I/O Rails (3.3V)", qty: 1, part: "TPS54202", desc: "2A buck converter", price: "$1.95" },
+            { name: "DDR3 (1.5V)", qty: 1, part: "TPS51200", desc: "DDR power solution", price: "$3.25" }
+          ]
+        }
+      ],
+      designConsiderations: [
+        "Length-matched DDR3 traces (±5mil tolerance)",
+        "Differential pairs for USB 3.0 (100Ω impedance)",
+        "Dedicated power planes for FPGA core voltage",
+        "Via stitching around high-speed signals",
+        "Thermal vias under FPGA for heat dissipation"
+      ],
+      firmwareModules: [
+        { name: "Timing Generator", description: "Pixel clock, CDS phases, frame sync" },
+        { name: "Frame Buffer", description: "Circular buffer for 100 frames (15MB)" },
+        { name: "FPN Correction", description: "Dark frame subtraction, gain map" },
+        { name: "Temporal Averaging", description: "Running average of 100 frames" },
+        { name: "Bad Pixel Replace", description: "Median filter for defective pixels" },
+        { name: "USB Interface", description: "Bulk transfer protocol, 400 MB/s" }
+      ]
+    }
+  };
+
+  const BoardCard = ({ id, board }) => {
+    const isExpanded = expandedBoard === id;
+    
+    return (
+      <div className="border border-gray-300 rounded-lg mb-4 overflow-hidden bg-white shadow-sm">
+        <div
+          className={`${board.color} text-white p-4 cursor-pointer flex items-center justify-between`}
+          onClick={() => setExpandedBoard(isExpanded ? null : id)}
+        >
+          <div className="flex items-center gap-3">
+            {board.icon}
+            <div>
+              <h3 className="font-bold text-lg">{board.name}</h3>
+              <p className="text-sm opacity-90">{board.purpose}</p>
+            </div>
+          </div>
+          {isExpanded ? <ChevronDown /> : <ChevronRight />}
+        </div>
+        
+        {isExpanded && (
+          <div className="p-6 space-y-6">
+            {/* Specifications */}
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                <Info className="w-4 h-4" /> Board Specifications
+              </h4>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                {Object.entries(board.specs).map(([key, value]) => (
+                  <div key={key} className="bg-gray-50 p-2 rounded">
+                    <span className="font-medium text-gray-600">{key}:</span>
+                    <span className="ml-2 text-gray-900">{value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Components */}
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-3">Bill of Materials</h4>
+              {board.components.map((category, idx) => (
+                <div key={idx} className="mb-4">
+                  <h5 className="font-medium text-blue-600 mb-2">{category.category}</h5>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-100">
+                        <tr>
+                          <th className="text-left p-2">Component</th>
+                          <th className="text-center p-2">Qty</th>
+                          <th className="text-left p-2">Part Number</th>
+                          <th className="text-left p-2">Description</th>
+                          <th className="text-right p-2">Price</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {category.parts.map((part, pidx) => (
+                          <tr key={pidx} className="border-b border-gray-200 hover:bg-gray-50">
+                            <td className="p-2">{part.name}</td>
+                            <td className="text-center p-2">{part.qty}</td>
+                            <td className="p-2 font-mono text-xs">{part.part}</td>
+                            <td className="p-2 text-gray-600">{part.desc}</td>
+                            <td className="text-right p-2 font-medium">{part.price}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Design Considerations */}
+            <div>
+              <h4 className="font-semibold text-gray-800 mb-3">Design Considerations</h4>
+              <ul className="space-y-2">
+                {board.designConsiderations.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm">
+                    <span className="text-blue-500 mt-1">▸</span>
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Interfaces (if present) */}
+            {board.interfaces && (
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-3">External Interfaces</h4>
+                <div className="grid gap-3">
+                  {board.interfaces.map((iface, idx) => (
+                    <div key={idx} className="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+                      <div className="font-medium text-blue-900">{iface.name}</div>
+                      <div className="text-sm text-gray-600">{iface.type} — {iface.spec}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Power Budget (if present) */}
+            {board.powerBudget && (
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-3">Power Budget</h4>
+                <div className="bg-yellow-50 p-4 rounded border border-yellow-200">
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    {Object.entries(board.powerBudget).map(([key, value]) => (
+                      <div key={key}>
+                        <div className="font-medium text-gray-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</div>
+                        <div className="text-gray-600">
+                          {typeof value === 'object' 
+                            ? Object.entries(value).map(([k, v]) => `${k}: ${v}`).join(', ')
+                            : value
+                          }
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Firmware Modules (if present) */}
+            {board.firmwareModules && (
+              <div>
+                <h4 className="font-semibold text-gray-800 mb-3">Firmware Modules</h4>
+                <div className="grid gap-2">
+                  {board.firmwareModules.map((module, idx) => (
+                    <div key={idx} className="bg-purple-50 p-3 rounded">
+                      <div className="font-medium text-purple-900">{module.name}</div>
+                      <div className="text-sm text-gray-600">{module.description}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6 bg-gray-50 min-h-screen">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          Mechanical Retina PCB Design Documentation
+        </h1>
+        <p className="text-gray-600">
+          Complete hardware specifications for the mechanical photon detector system
+        </p>
+      </div>
+
+      <div className="mb-6 bg-blue-100 border-l-4 border-blue-500 p-4 rounded">
+        <p className="text-sm text-blue-900">
+          <strong>Status:</strong> Design phase — Schematics in progress | 
+          <strong className="ml-4">Total System Cost:</strong> ~$5,800 (prototype) | 
+          <strong className="ml-4">Power Budget:</strong> 1.25W total
+        </p>
+      </div>
+
+      <div className="space-y-4">
+        {Object.entries(boards).map(([id, board]) => (
+          <BoardCard key={id} id={id} board={board} />
+        ))}
+      </div>
+
+      <div className="mt-8 bg-white p-6 rounded-lg border border-gray-300">
+        <h3 className="font-bold text-lg mb-4">System Integration Notes</h3>
+        <div className="space-y-3 text-sm text-gray-700">
+          <p><strong>Board Interconnections:</strong> Use shielded ribbon cables for analog signals, twisted-pair Cat6 for digital, coaxial for high-speed USB</p>
+          <p><strong>Mechanical Assembly:</strong> Stack boards vertically with 15mm standoffs, aluminum enclosure with EMI gaskets</p>
+          <p><strong>Thermal Management:</strong> Forced air cooling (40mm fan) optional for continuous operation</p>
+          <p><strong>Testing Sequence:</strong> Power board → Control board → Readout board → FPGA board → Full system</p>
+          <p><strong>Fabrication:</strong> Use reputable PCB manufacturers (e.g., PCBWay, JLCPCB) with impedance control and controlled dielectric</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PCBDesignViewer;
