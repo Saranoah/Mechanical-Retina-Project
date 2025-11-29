@@ -338,7 +338,7 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
   title = {Mechanical Retina: Photon Detection Through Mechanical Transduction},
   year = {2024},
   publisher = {GitHub},
-  url = {https://github.com/Mechanical-Retina-Project}
+  url = {(https://github.com/Saranoah/Mechanical-Retina-Project)}
 }
 ```
 
