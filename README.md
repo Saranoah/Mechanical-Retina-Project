@@ -232,6 +232,24 @@ mechanical-retina/
 
 ---
 
+## 🖥️ Interactive PCB Design Viewer
+
+Explore the complete hardware design with our interactive viewer:
+
+**[🚀 Launch Interactive Viewer](https://Saranoah.github.io/Mechanical-Retina-Project/interactive/)**
+
+[![PCB Design Viewer](docs/images/viewer_preview.png)](https://Saranoah.github.io/Mechanical-Retina-Project/interactive/))
+
+Features:
+- 📋 Complete Bill of Materials (BOM)
+- ⚡ Power budget analysis
+- 🔧 Design considerations
+- 💻 Firmware module documentation
+- 📊 Cost breakdown
+
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions from:
