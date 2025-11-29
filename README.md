@@ -306,6 +306,9 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 
 If you find this project interesting, please consider starring it! ⭐
 
+## Acknowledgments
+Concept development assisted by AI collaboration, exploring the boundaries of mechanical photon detection.
+
 ---
 
 **Note:** This is a research project exploring fundamental limits of mechanical photodetection. It is not intended to compete with commercial CMOS/CCD sensors but rather to demonstrate novel transduction principles and potential applications in extreme environments.
