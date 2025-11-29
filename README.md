@@ -92,36 +92,77 @@ python thermal_response.py
 
 ```
 mechanical-retina/
-├── docs/
+├── README.md                          
+├── LICENSE                            
+├── .gitignore                         
+├── CONTRIBUTING.md                  
+├── requirements.txt                  
+│
+├── docs/                              
 │   ├── theory/
-│   │   ├── radiation_pressure.md      # Photon momentum transfer calculations
-│   │   ├── thermal_detection.md       # Bolometric detection principles
-│   │   └── quantum_limits.md          # Fundamental sensitivity limits
+│   │   ├── CONCEPT.md
+│   │   ├── PHYSICS_BACKGROUND.md
+│   │   └── quantum_limits.md
 │   ├── design/
-│   │   ├── mems_specification.md      # Complete MEMS device specs
-│   │   ├── system_architecture.md     # Full system design
-│   │   └── fabrication_process.md     # 14-mask MEMS process flow
-│   └── images/
-│       ├── cantilever_response.png
-│       ├── system_block_diagram.png
-│       └── pixel_cross_section.png
-├── simulations/
+│   │   ├── mems_specification.md
+│   │   ├── system_architecture.md
+│   │   └── fabrication_process.md
+│   ├── ROADMAP.md
+│   ├── LITERATURE_REVIEW.md
+│   └── images/                        
+│       └── .gitkeep                   
+│
+├── simulations/                       
 │   ├── radiation_pressure/
-│   │   ├── single_photon_force.py     # Cantilever dynamics simulation
-│   │   └── thermal_noise_analysis.py  # Noise budget calculator
-│   ├── bolometer_array/
-│   │   ├── thermal_response.py        # Bolometer pixel simulation
-│   │   └── array_imaging.py           # Image formation demo
-│   └── signal_processing/
-│       ├── image_reconstruction.py    # Full processing pipeline
-│       └── calibration_tools.py       # NUC and FPN correction
-├── hardware/
-│   ├── mems_layout/                   # GDS files (future)
-│   ├── pcb_designs/                   # KiCAD schematics (future)
-│   └── optical_design/                # Lens specifications
-├── tests/
-│   └── unit_tests/
-└── README.md
+│   │   ├── single_photon_force.py
+│   │   └── thermal_noise_analysis.py
+│   ├── thermal_expansion/
+│   │   └── microbolometer_model.py
+│   ├── material_analysis/
+│   │   └── photomechanical_materials.py
+│   └── signal_processing/             
+│       ├── image_reconstruction.py
+│       └── calibration_tools.py
+│
+├── designs/                           
+│   ├── mems/
+│   │   ├── cantilever_array/
+│   │   │   └── layout.gds
+│   │   └── membrane_detector/
+│   │       └── design.json
+│   └── optical_system/
+│       └── lens_assembly.f3d
+│
+├── hardware/                          
+│   ├── pcb_designs/
+│   │   └── README.md
+│   └── bom/
+│       └── components.csv
+│
+├── firmware/                          
+│   ├── readout_algorithm/
+│   │   └── signal_processing.py
+│   └── control_system/
+│       └── pixel_addressing.cpp
+│
+├── data_analysis/                     
+│   ├── image_reconstruction/
+│   │   └── pattern_recognition.py
+│   └── noise_filtering/
+│       └── kalman_filter.py
+│
+├── experiments/                       
+│   ├── lab_protocols/
+│   │   └── test_setup_v1.md
+│   └── results/
+│       ├── initial_measurements/
+│       │   └── placeholder.md
+│       └── data/                      
+│           └── .gitkeep
+│
+└── tests/                             
+    ├── test_simulations.py
+    └── test_signal_processing.py
 ```
 
 ---
